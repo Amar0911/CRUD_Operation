@@ -1,0 +1,218 @@
+{% extends "core/base.html" %}
+
+
+
+{% block content %}
+
+<style>
+
+    #nav-head {
+        background: rgb(102, 0, 0);
+        color: white;
+        font-weight: bold;
+        font-size: 35px;
+        box-shadow: 0px 4px rgb(200, 228, 250, 0.5)
+    }
+
+    .container {
+        margin-top: 30px;
+        padding: 20px;
+    }
+    
+    
+   
+    h2 {
+        font-size: 24px;
+        color: rgb(51, 51, 51);
+        margin-bottom: 20px;
+    }
+    
+    
+  /* input form */
+
+    #input-form {
+        border: 1px solid black;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        height: 100%;
+        font-weight: bold;
+        font-size: 18px;
+        color: red;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #000;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .form-container input[type="text"]:focus,
+    .form-container input[type="email"]:focus {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        background-color: #000;
+        color: white;
+    }
+
+
+    
+    button {
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+    }
+    
+    button.btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    button.btn-success:hover {
+        background-color: #218838;
+        color: black;
+    }
+    
+    button.btn-warning {
+        background-color: #ffc107;
+        color: white;
+    }
+    
+    
+    
+    button.btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    button.btn-danger:hover {
+        background-color: #c82333;
+    }
+    
+    
+
+    /* table */
+
+    #table {
+        border: 1px solid black;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    
+    .table {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* messages */
+
+.message-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    margin: 20px auto; 
+    padding: 10px 20px; 
+    width: 50%; 
+    border: 1px solid #bee5eb; 
+    border-radius: 10px; 
+    background-color: #d1ecf1; 
+    color: #0c5460; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+
+.message-container p {
+    margin: 0;
+    font-size: 16px; 
+    font-weight: bold; 
+}
+
+    
+    
+</style>
+
+<div class="text-center" id="nav-head">
+    <div>CRUD OPERATION</div>
+</div>
+
+{% if messages %}
+    <div class="alert alert-info message-container">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <!-- Form Section -->
+        <div class="col-md-5" id="input-form">
+            <h2 class="text-center" style="color: white;">Enter Your Details</h2>
+            <div class="form-container">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ co.as_p }}
+                    <br>
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <button type="submit" id="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <!-- Table Section -->
+        <div class="col-md-6" id="table">
+            <h2 class="text-center" style="color: white;">Database</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in cp %}
+                    <tr>
+                        <th scope="row">{{ c.id }}</th>
+                        <td>{{ c.name }}</td>
+                        <td>{{ c.email }}</td>
+                        <td>
+                            <div class="d-flex justify-content-around">
+                                <a href="{% url 'update' c.id %}" class="btn btn-warning">Edit</a>
+                                <form action="{% url 'delete' c.id %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
